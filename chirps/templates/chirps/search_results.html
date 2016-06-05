@@ -1,0 +1,65 @@
+{% extends "Chirp/chirp.html" %}
+
+{% block title %}
+	{{query}} - Chirp search
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-3">
+		<div class="card">
+			<div class="card-header text-xs-center">
+				Trends
+			</div>
+			<div class="card-block">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">#Trend 1 <small></small></li>
+					<li class="list-group-item">#Trend 2</li>
+					<li class="list-group-item">#Trend 3</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		{% if search_profile != None %}
+		<div class="card card-inverse card-success text-xs-center">
+			<a href="/accounts/profile/user/{{search_profile.username}}" style="text-decoration: none;">
+			<div class="card-block">
+				<blockquote class="card-blockquote">
+					<p>{{search_profile.first_name}} {{search_profile.last_name}} @{{search_profile.username}}</p>
+				</blockquote>
+			</div>
+			</a>
+		</div>
+		{% endif %}
+		<div class="card">
+				<ul class="list-group">
+					{% for chirp_data in search_data %}
+					<li class="list-group-item">
+						<h5 class="list-group-item-heading">{{chirp_data.user.username}} <small class="text-muted">@{{chirp_data.user.username}} <a href="{{chirp_data.user.username}}/{{chirp_data.id}}">{{chirp_data.timestamp|timesince}}</a></small></h4>
+							<p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>
+						</li>
+						{% endfor %}
+					</ul>
+			</div>
+		</div>
+
+		<div class="col-md-3">
+			<div class="card">
+				<div class="card-header text-xs-center">
+					Who to Follow
+				</div>
+				<div class="card-block">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Profile 1</li>
+						<li class="list-group-item">Profile 2</li>
+						<li class="list-group-item">Profile 3</li>
+						<li class="list-group-item">Profile 4</li>
+						<li class="list-group-item">Profile 5</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endblock %}

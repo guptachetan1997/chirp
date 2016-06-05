@@ -1,0 +1,21 @@
+{% extends "Chirp/chirp.html" %}
+
+{% block title %}
+	Chirp Something
+{% endblock %}
+
+{% block content %}
+<div class="row text-xs-center">
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+		<form action="/post_chirp/" method="post">{% csrf_token %}
+			<h2 class="form-signin-heading text-primary">Chirp!</h2>
+			<label for="inputQuestion" class="sr-only">Content</label> {{form.content}}
+			<br />
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Chirp!</button>
+		</form>
+	</div>
+</div>
+<div class="col-md-3"></div>
+</div>
+{% endblock %}

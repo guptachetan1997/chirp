@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>SignUp</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    {% load staticfiles %}
+    <link href="{% static 'accounts/css/signin.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row">
+          <div class="col-md-4">
+            <br><br>
+            {% if messages %}
+            <div class="list-group">
+              {% for message in messages %}
+              <a href="#" class="list-group-item list-group-item-danger">
+                <h5 class="list-group-item-heading">{{message}}</h4>
+              </a>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+      <form class="form-signin col-md-12" action="/accounts/register" method="post">{% csrf_token %}
+        <h2 class="form-signin-heading">Welcome New User!</h2>
+        {{form.username}}
+        {{form.first_name}}
+        {{form.last_name}}
+        {{form.email}}
+        {{form.password}}
+        <center><small>
+          Already have an account? <a href="/accounts/login">Sign in »</a>
+        </small></center>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+      </form>
+    </div>
+    </div> <!-- /container -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+  </body>
+</html>

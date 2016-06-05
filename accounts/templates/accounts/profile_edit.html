@@ -1,0 +1,35 @@
+{% extends "Chirp/chirp.html" %}
+
+{% block title %}
+	Edit Profile
+{% endblock %}
+
+{% block content %}
+    <div class="container col-xs-6">
+      <form class="form-signin"  action="/accounts/profile/edit" enctype='multipart/form-data' method="post"> {% csrf_token %}
+        <h2 class="form-signin-heading">Profile</h2>
+        <div class="form-inline">
+          <label>Gender : </label>
+          {{form.gender}}
+        </div>
+        <div class="form-inline">
+          <label>Bio&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+          {{form.bio}}
+        </div>
+        <div class="form-inline">
+          <label>DOB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+          {{form.dob}}
+        </div>
+        <div class="form-inline">
+          <label>Location&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+          {{form.location}}
+        </div>
+        <br />
+        <div class="form-inline">
+          <label>Display Picture&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+          {{form.display_pic}}
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+      </form>
+    </div>
+{% endblock %}

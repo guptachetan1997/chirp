@@ -1,0 +1,101 @@
+{% extends "Chirp/chirp.html" %}
+
+{% block title %}
+	Chirp
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-3">
+		<div class="card">
+			<div class="card-header text-xs-center">
+				@{{request.user.username}}
+			</div>
+			<div class="card-block">
+				<h4 class="card-title text-xs-center">
+					{{request.user.first_name}} {{request.user.last_name}}
+				</h4>
+				<table class="table-sm">
+					<thead>
+						<tr>
+							<th>Chrips</th>
+							<th>Followers</th>
+							<th>Following</th>
+						</tr>
+					</thead>
+					<tbody class="text-xs-center">
+						<tr>
+							<td>{{user_chirps}}</td>
+							<td>{{request.user.profile.followed_by.all.count}}</td>
+							<td>{{request.user.profile.follows.all.count}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-header text-xs-center">
+				Trends
+			</div>
+			<div class="card-block">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">#Trend 1 <small></small></li>
+					<li class="list-group-item">#Trend 2</li>
+					<li class="list-group-item">#Trend 3</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="card">
+			<div class="card-block text-xs-center">
+				<a href="/post_chirp" class="btn btn-warning btn-block" role="button">Chirp something!</a>
+			</div>
+				<ul class="list-group">
+					{% for chirp_data in chirps_data %}
+					<li class="list-group-item">
+						<h5 class="list-group-item-heading"><a href="/accounts/profile/user/{{chirp_data.user.username}}" style="color:black !important">{{chirp_data.user.first_name}} {{chirp_data.user.last_name}}</a> <small class="text-muted">@{{chirp_data.user.username}} <a href="{{chirp_data.user.username}}/{{chirp_data.id}}">{{chirp_data.timestamp|timesince}}</a></small></h4>
+							<p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>
+							<div class="row">
+								<form class="form-group col-xs-6">
+									<button class="btn btn-default">
+										<i class="fa fa-retweet" aria-hidden="true"></i>
+									</button>
+								</form>
+							{% load chirp_tags %}
+							<form class="form-group col-xs-6" action="/like" method="post">{% csrf_token %}
+							    <input type="hidden" name="like" value="{{chirp_data.id}}">
+							    {% if request.user.id|check_if_liked:chirp_data.id  == 1 %}
+							    <button type="submit" class="btn btn-default" value="like">
+							      <i type="submit" class="fa fa-heart" aria-hidden="true">{{chirp_data.like.all.count}}</i>
+							    </button>
+							    {% else %}
+							    <button type="submit" class="btn btn-default" value="like">
+							      <i type="submit" class="fa fa-heart-o" aria-hidden="true">{{chirp_data.like.all.count}}</i>
+							    </button>
+							    {% endif %}
+							</form>
+						</div>
+						</li>
+						{% endfor %}
+					</ul>
+			</div>
+		</div>
+
+		<div class="col-md-3">
+			<div class="card">
+				<div class="card-header text-xs-center">
+					Who to Follow
+				</div>
+				<div class="card-block">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Profile 1</li>
+						<li class="list-group-item">Profile 2</li>
+						<li class="list-group-item">Profile 3</li>
+						<li class="list-group-item">Profile 4</li>
+						<li class="list-group-item">Profile 5</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endblock %}
