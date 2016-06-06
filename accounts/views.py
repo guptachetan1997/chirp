@@ -117,9 +117,9 @@ def user_profile_display(request, user_username):
     profile_basics = User.objects.get(username = user_username)
     profile_contents = UserProfile.objects.get(user_id = profile_basics.id)
     user_info = {}
-    user_info['chirps_data'] = chirp.objects.filter(user_id = profile_basics.id)
+    user_info['chirps_data'] = chirp.objects.filter(user_id = profile_basics.id).order_by("-timestamp")
     user_info['chirp_count'] = user_info['chirps_data'].count()
-    user_info['mentions'] = chirp.objects.filter(Q(content__icontains='@'+str(profile_basics.username)) & ~Q(user = profile_basics))
+    user_info['mentions'] = chirp.objects.filter(Q(content__icontains='@'+str(profile_basics.username)) & ~Q(user = profile_basics)).order_by("-timestamp")
     user_info['mention_count'] = user_info['mentions'].count()
     user_info['followers'] = profile_basics.profile.followed_by.all()
     user_info['follower_count'] = user_info['followers'].count()

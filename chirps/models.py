@@ -13,6 +13,9 @@ class chirp(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey(User)
 	like = models.ManyToManyField(User, related_name='likes')
+	rechirp_status = models.BooleanField(default = False)
+	origin_chirp_user = models.ForeignKey(User, blank = True, null=True, related_name="ori_chirp_by")
+
 	def __str__(self):
 		return self.content[:140]
 

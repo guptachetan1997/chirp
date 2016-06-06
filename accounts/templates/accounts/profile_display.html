@@ -58,7 +58,23 @@
         <ul class="list-group">
 					{% for chirp_data in user_info.chirps_data %}
   					<li class="list-group-item">
-  						<h5 class="list-group-item-heading">{{chirp_data.user.username}} <small class="text-muted">@{{chirp_data.user.username}} <a href="{{chirp_data.user.username}}/{{chirp_data.id}}">{{chirp_data.timestamp|timesince}}</a></small></h4>
+							{% if chirp_data.rechirp_status %}
+							<a href="/accounts/profile/user/{{chirp_data.user.username}}" style="color:black !important">
+							<small class="text-muted">@{{chirp_data.user.username}}</a> rechirped</small>
+							<h5 class="list-group-item-heading">
+								<a href="/accounts/profile/user/{{chirp_data.origin_chirp_user.username}}" style="color:black !important">
+									{{chirp_data.origin_chirp_user.first_name}} {{chirp_data.origin_chirp_user.last_name}}
+								</a> <small class="text-muted">@{{chirp_data.origin_chirp_user.username}}
+									<a href="{{chirp_data.origin_chirp_user.username}}/{{chirp_data.id}}">
+										{{chirp_data.timestamp|timesince}}</a></small></h5>
+								{% else %}
+								<h5 class="list-group-item-heading">
+									<a href="/accounts/profile/user/{{chirp_data.user.username}}" style="color:black !important">
+										{{chirp_data.user.first_name}} {{chirp_data.user.last_name}}
+									</a> <small class="text-muted">@{{chirp_data.user.username}}
+										<a href="{{chirp_data.user.username}}/{{chirp_data.id}}">
+											{{chirp_data.timestamp|timesince}}</a></small></h5>
+								{% endif %}
 							<p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>
   					</li>
 					{% endfor %}

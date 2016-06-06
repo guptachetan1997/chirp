@@ -10,20 +10,6 @@ from forms import ChirpForm
 from accounts.models import UserProfile
 import re
 
-# Create your views here.
-
-def get_latest(profile):
-    try:
-		return profile.user.chirp_set.order_by('-timestamp')
-    except IndexError:
-        return ""
-
-def ifollowthem_check(user, req_user):
-	if user.profile in req_user.profile.follows.all():
-		return True
-	else:
-		return False
-
 @login_required(login_url = '/accounts/login')
 def feed(request):
 	chirpss_data = chirp.objects.filter(~Q(user_id=request.user.id)).order_by('-timestamp')
@@ -67,6 +53,25 @@ def like(request):
 			except ObjectDoesNotExist:
 				return HttpResponseRedirect('/')
 
+	return HttpResponseRedirect('/')
+
+@login_required(login_url = '/accounts/login')
+@csrf_protect
+def rechirp(request):
+	if request.method == 'POST':
+		chirp_id = request.POST.get('rechirp', False)
+		if chirp_id:
+			try:
+				req_chirp = chirp.objects.get(id = chirp_id)
+				new_chirp = chirp()
+				new_chirp = req_chirp
+				new_chirp.pk = None
+				new_chirp.rechirp_status = True
+				new_chirp.origin_chirp_user = req_chirp.user
+				new_chirp.user = request.user
+				new_chirp.save()
+			except ObjectDoesNotExist:
+				return HttpResponseRedirect('/')
 	return HttpResponseRedirect('/')
 
 @login_required(login_url = '/accounts/login')
