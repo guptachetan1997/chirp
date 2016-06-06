@@ -23,4 +23,10 @@ class UserProfile(models.Model):
         u = User.objects.get(id = self.user_id)
         return u.username
 
+    def do_i_follow(self, query_profile):
+        if query_profile in self.follows.all():
+            return True
+        else:
+            return False
+
 User.profile = property(lambda u : UserProfile.objects.get_or_create(user=u)[0])

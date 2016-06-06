@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from models import chirp
 from forms import ChirpForm
 from accounts.models import UserProfile
@@ -11,9 +12,22 @@ import re
 
 # Create your views here.
 
+def get_latest(profile):
+    try:
+		return profile.user.chirp_set.order_by('-timestamp')
+    except IndexError:
+        return ""
+
+def ifollowthem_check(user, req_user):
+	if user.profile in req_user.profile.follows.all():
+		return True
+	else:
+		return False
+
 @login_required(login_url = '/accounts/login')
 def feed(request):
-	chirps_data = chirp.objects.all().order_by('-timestamp')
+	chirpss_data = chirp.objects.filter(~Q(user_id=request.user.id)).order_by('-timestamp')
+	chirps_data = [chirp_data for chirp_data in chirpss_data if request.user.profile.do_i_follow(chirp_data.user.profile)]
 	user_chirps = chirp.objects.filter(user=request.user).count()
 	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps})
 
