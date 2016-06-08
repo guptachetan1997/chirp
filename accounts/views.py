@@ -116,6 +116,7 @@ def user_unfollow(request):
 def user_profile_display(request, user_username):
     profile_basics = User.objects.get(username = user_username)
     profile_contents = UserProfile.objects.get(user_id = profile_basics.id)
+    who_to_follow = request.user.profile.get_who_to_follow()
     user_info = {}
     user_info['chirps_data'] = chirp.objects.filter(user_id = profile_basics.id).order_by("-timestamp")
     user_info['chirp_count'] = user_info['chirps_data'].count()
@@ -128,4 +129,4 @@ def user_profile_display(request, user_username):
     user_info['ifollowthemflag'] = False
     if request.user.profile.follows.filter(user__username=user_username):
         user_info['ifollowthemflag'] = True
-    return render(request, 'accounts/profile_display.html' , {'profile_contents': profile_contents, 'profile_basics':profile_basics, 'user_info':user_info})
+    return render(request, 'accounts/profile_display.html' , {'profile_contents': profile_contents, 'profile_basics':profile_basics, 'user_info':user_info, 'who_to_follow':who_to_follow})

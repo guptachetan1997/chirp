@@ -124,11 +124,9 @@
 				</div>
 				<div class="card-block">
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Profile 1</li>
-						<li class="list-group-item">Profile 2</li>
-						<li class="list-group-item">Profile 3</li>
-						<li class="list-group-item">Profile 4</li>
-						<li class="list-group-item">Profile 5</li>
+						{% for person in who_to_follow %}
+							<li class="list-group-item"><a href="/accounts/profile/user/{{person.username}}" class="card-link">@{{person.username}}</a></li>
+						{% endfor %}
 					</ul>
 				</div>
 			</div>

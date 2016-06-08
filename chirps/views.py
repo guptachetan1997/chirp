@@ -29,11 +29,12 @@ def get_trending_hasgtags():
 
 @login_required(login_url = '/accounts/login')
 def feed(request):
+	who_to_follow = request.user.profile.get_who_to_follow()
 	trends = get_trending_hasgtags()
 	chirpss_data = chirp.objects.filter(~Q(user_id=request.user.id)).order_by('-timestamp')
 	chirps_data = [chirp_data for chirp_data in chirpss_data if request.user.profile.do_i_follow(chirp_data.user.profile)]
 	user_chirps = chirp.objects.filter(user=request.user).count()
-	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps, 'trends':trends})
+	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps, 'trends':trends, 'who_to_follow':who_to_follow})
 
 @login_required(login_url = '/accounts/login')
 def single_chirp(request, user_username, chirp_id):
@@ -94,6 +95,8 @@ def rechirp(request):
 
 @login_required(login_url = '/accounts/login')
 def search(request):
+	trends = get_trending_hasgtags()
+	who_to_follow = request.user.profile.get_who_to_follow()
 	query = request.GET.get('search', '')
 	pat = re.compile(r'[@](\w+)')
 	attags = pat.finditer(query)
@@ -106,5 +109,5 @@ def search(request):
 		break
 	search_data = chirp.objects.filter(content__icontains=query).order_by('-timestamp')
 	people = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
-	return render(request, 'chirps/search_results.html', {'search_data':search_data, 'query':query, 'search_profile':search_profile, 'people':people})
+	return render(request, 'chirps/search_results.html', {'search_data':search_data, 'query':query, 'search_profile':search_profile, 'people':people, 'trends':trends, 'who_to_follow':who_to_follow})
 	#We can differenitate here on the basis of the search query we have got like @ and # or any other textual query
