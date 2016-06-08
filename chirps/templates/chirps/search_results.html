@@ -32,6 +32,17 @@
 			</div>
 			</a>
 		</div>
+		{% else %}
+			{% for person in people %}
+			<div class="card card-inverse card-success text-xs-center">
+			<a href="/accounts/profile/user/{{person.username}}" style="text-decoration: none;">
+			<div class="card-block">
+				<h3 class="card-title">{{person.first_name}} {{person.last_name}}</h3>
+				<p class="card-text">{{person.profile.bio}}</p>
+			</div>
+			</a>
+		</div>
+			{% endfor %}
 		{% endif %}
 		<div class="card">
 				<ul class="list-group">

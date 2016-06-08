@@ -10,12 +10,30 @@ from forms import ChirpForm
 from accounts.models import UserProfile
 import re
 
+def get_trending_hasgtags():
+	trends = {}
+	chirps = chirp.objects.all()
+	for chirp_data in chirps:
+		text = chirp_data.content
+		pat = re.compile(r'[#](\w+)')
+		hashtags = pat.finditer(text)
+		for hasgtag in hashtags:
+			try:
+				trends[hasgtag.group().lower()]+=1
+			except KeyError:
+				trends[hasgtag.group().lower()] = 1
+	trending = []
+	for w in sorted(trends, key=trends.get, reverse=True):
+  		trending.append(dict(hasgtag=w, chirp_count=trends[w]))
+	return trending[:3]
+
 @login_required(login_url = '/accounts/login')
 def feed(request):
+	trends = get_trending_hasgtags()
 	chirpss_data = chirp.objects.filter(~Q(user_id=request.user.id)).order_by('-timestamp')
 	chirps_data = [chirp_data for chirp_data in chirpss_data if request.user.profile.do_i_follow(chirp_data.user.profile)]
 	user_chirps = chirp.objects.filter(user=request.user).count()
-	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps})
+	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps, 'trends':trends})
 
 @login_required(login_url = '/accounts/login')
 def single_chirp(request, user_username, chirp_id):
@@ -81,10 +99,12 @@ def search(request):
 	attags = pat.finditer(query)
 	search_profile = None
 	for attag in attags:
-		flag = User.objects.filter(username = attag.group()[1:])
-		if flag.exists():
-			search_profile = flag[0]
+		try:
+			search_profile = User.objects.get(username = attag.group()[1:])
+		except ObjectDoesNotExist:
+			search_profile = None
 		break
 	search_data = chirp.objects.filter(content__icontains=query).order_by('-timestamp')
-	return render(request, 'chirps/search_results.html', {'search_data':search_data, 'query':query, 'search_profile':search_profile})
+	people = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+	return render(request, 'chirps/search_results.html', {'search_data':search_data, 'query':query, 'search_profile':search_profile, 'people':people})
 	#We can differenitate here on the basis of the search query we have got like @ and # or any other textual query

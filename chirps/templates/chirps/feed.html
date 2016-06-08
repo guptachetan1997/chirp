@@ -37,9 +37,9 @@
 			</div>
 			<div class="card-block">
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item">#Trend 1 <small></small></li>
-					<li class="list-group-item">#Trend 2</li>
-					<li class="list-group-item">#Trend 3</li>
+					{% for trend in trends %}
+					<li class="list-group-item"><a href="/search?search=%23{{trend.hasgtag|slice:"1:"}}">{{trend.hasgtag}}</a> <small>{{trend.chirp_count}} chirps</small></li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
