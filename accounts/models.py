@@ -36,7 +36,7 @@ class UserProfile(models.Model):
     	for user in users:
     		if not self.do_i_follow(user.profile):
     			who_to_follow.append(user)
-    	return who_to_follow
+    	return who_to_follow[:5]
 
 
 User.profile = property(lambda u : UserProfile.objects.get_or_create(user=u)[0])
