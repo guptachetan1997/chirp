@@ -7,3 +7,4 @@ html5lib==0.9999999
 dj-database-url==0.4.1
 gunicorn==19.6.0
 psycopg2==2.6.1
+Pillow==3.1.2
