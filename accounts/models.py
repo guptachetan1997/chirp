@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=50, blank=True)
     dob = models.DateField(default="2016-03-03")
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
-    display_pic = models.ImageField(upload_to=upload_location, default="http://santetotal.com/wp-content/uploads/2014/05/default-user.png")
+    display_pic = models.ImageField(upload_to=upload_location)
 
     def __str__(self):
         u = User.objects.get(id = self.user_id)
