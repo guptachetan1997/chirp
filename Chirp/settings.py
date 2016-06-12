@@ -137,7 +137,3 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 
 APPEND_SLASH=True
-
-import dj_database_url
-
-DATABASES['default'] = dj_database_url.config()
