@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^api/chirps/', include('chirps.api.urls', namespace='chirps-api')),
     url(r'^', include('chirps.urls', namespace='chirps')),
 ]
 

@@ -72,7 +72,7 @@
 									<a href="/accounts/profile/user/{{chirp_data.user.username}}" style="color:black !important">
 										{{chirp_data.user.first_name}} {{chirp_data.user.last_name}}
 									</a> <small class="text-muted">@{{chirp_data.user.username}}
-										<a href="{{chirp_data.user.username}}/{{chirp_data.id}}">
+										<a href="/{{chirp_data.user.username}}/{{chirp_data.id}}">
 											{{chirp_data.timestamp|timesince}}</a></small></h5>
 								{% endif %}
 							<p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>

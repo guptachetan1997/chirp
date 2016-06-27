@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chirps',
     'accounts',
+
+    #third-party apps
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
