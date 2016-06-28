@@ -25,7 +25,7 @@ class UserProfile(models.Model):
         return u.username
 
     def do_i_follow(self, query_profile):
-        if query_profile in self.follows.all():
+        if query_profile in self.follows.all() or query_profile == self:
             return True
         else:
             return False

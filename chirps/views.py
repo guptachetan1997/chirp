@@ -31,7 +31,7 @@ def get_trending_hasgtags():
 def feed(request):
 	who_to_follow = request.user.profile.get_who_to_follow()
 	trends = get_trending_hasgtags()
-	chirpss_data = chirp.objects.filter(~Q(user_id=request.user.id)).order_by('-timestamp')
+	chirpss_data = chirp.objects.all().order_by('-timestamp')
 	chirps_data = [chirp_data for chirp_data in chirpss_data if request.user.profile.do_i_follow(chirp_data.user.profile)]
 	user_chirps = chirp.objects.filter(user=request.user).count()
 	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps, 'trends':trends, 'who_to_follow':who_to_follow})

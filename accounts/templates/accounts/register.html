@@ -37,7 +37,10 @@
             {% endif %}
           </div>
       <form class="form-signin col-md-12" action="/accounts/register" method="post">{% csrf_token %}
-        <h2 class="form-signin-heading">Welcome New User!</h2>
+        <center>
+          <h1 class="display-2">Chirp</h1>
+          <h2 class="form-signin-heading">Welcome New User</h2>
+        </center>
         {{form.username}}
         {{form.first_name}}
         {{form.last_name}}

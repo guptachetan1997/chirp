@@ -17,10 +17,13 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^api/auth/token', obtain_jwt_token),
+    url(r'^api/accounts/', include('accounts.api.urls', namespace='users-api')),
     url(r'^api/chirps/', include('chirps.api.urls', namespace='chirps-api')),
     url(r'^', include('chirps.urls', namespace='chirps')),
 ]

@@ -37,7 +37,10 @@
             {% endif %}
           </div>
        <form class="form-signin" action="/accounts/auth_view" method="post">{% csrf_token %}
-        <h2 class="form-signin-heading">Please sign in</h2>
+         <center>
+           <h1 class="display-2">Chirp</h1>
+           <h2 class="form-signin-heading">Please sign in</h2>
+         </center>
         <label for="inputUsername" class="sr-only">Username</label>
         <input type="username" name="inputUsername" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
