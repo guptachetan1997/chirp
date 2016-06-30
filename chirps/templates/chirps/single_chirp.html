@@ -21,7 +21,7 @@
 					</div>
 					<form method="POST" action=".">{%csrf_token%}
 						<div class="input-group card-block">
-				      <input type="text" class="form-control" id="id_content" name="content" placeholder="Reply to @{{chirp_data.user.username}}" maxlength="140" autofocus="True">
+				      <input type="text" class="form-control" id="id_content" name="content" placeholder="Reply to @{{chirp_data.user.username}}" maxlength="140" autofocus="True" required="True">
 				      <span class="input-group-btn">
 			        <button class="btn btn-secondary" type="submit">Reply</button>
 				      </span>
