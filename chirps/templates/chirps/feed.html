@@ -72,14 +72,14 @@
 							{% endif %}
 							<p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>
 							<div class="row">
-								<form class="form-group col-xs-6" action="/rechirp" method="post">{% csrf_token %}
+								<form class="form-group col-xs-4" action="/rechirp" method="post">{% csrf_token %}
 									<input type="hidden" name="rechirp" value="{{chirp_data.id}}">
 									<button class="btn btn-default" type="submit">
 										<i class="fa fa-retweet" aria-hidden="true"></i>
 									</button>
 								</form>
 							{% load chirp_tags %}
-							<form class="form-group col-xs-6" action="/like" method="post">{% csrf_token %}
+							<form class="form-group col-xs-4" action="/like" method="post">{% csrf_token %}
 							    <input type="hidden" name="like" value="{{chirp_data.id}}">
 							    {% if request.user.id|check_if_liked:chirp_data.id  == 1 %}
 							    <button type="submit" class="btn btn-default" value="like">
@@ -90,6 +90,11 @@
 							      <i type="submit" class="fa fa-heart-o" aria-hidden="true">{{chirp_data.like.all.count}}</i>
 							    </button>
 							    {% endif %}
+							</form>
+							<form class="form-group col-xs-4" action="/{{chirp_data.user.username}}/{{chirp_data.id}}">
+							    <button type="submit" class="btn btn-default" value="like">
+										<i class="fa fa-reply" aria-hidden="true">{{chirp_data.reply_count}}</i>
+							    </button>
 							</form>
 						</div>
 						</li>

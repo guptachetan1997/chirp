@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from models import chirp
-from forms import ChirpForm
+from forms import ChirpForm,ChirpReplyForm
 from accounts.models import UserProfile
 import re
 
@@ -31,15 +31,31 @@ def get_trending_hasgtags():
 def feed(request):
 	who_to_follow = request.user.profile.get_who_to_follow()
 	trends = get_trending_hasgtags()
-	chirpss_data = chirp.objects.all().order_by('-timestamp')
+	chirpss_data = chirp.objects.all().filter(parent=None).order_by('-timestamp')
 	chirps_data = [chirp_data for chirp_data in chirpss_data if request.user.profile.do_i_follow(chirp_data.user.profile)]
 	user_chirps = chirp.objects.filter(user=request.user).count()
 	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps, 'trends':trends, 'who_to_follow':who_to_follow})
 
 @login_required(login_url = '/accounts/login')
+@csrf_protect
 def single_chirp(request, user_username, chirp_id):
-	chirp_data = chirp.objects.get(id = chirp_id)
-	return render(request, 'chirps/single_chirp.html', {'chirp_data':chirp_data})
+	if request.method == 'POST':
+		try:
+			reply_chirp_obj = chirp()
+			reply_chirp_obj.content = request.POST.get('content')
+			reply_chirp_obj.user = User.objects.get(id = int(request.POST.get('chirp_user')))
+			parent_id = int(request.POST.get('parent'))
+			if parent_id:
+				parent_obj = chirp.objects.filter(id=parent_id)
+				if parent_obj is not None:
+					reply_chirp_obj.parent = parent_obj.first()
+				reply_chirp_obj.save()
+		except:
+			return HttpResponseRedirect("/%s/%s" % (user_username, chirp_id))
+		return HttpResponseRedirect("/%s/%s" % (user_username, chirp_id))
+	else:
+		chirp_data = chirp.objects.get(id = chirp_id)
+		return render(request, 'chirps/single_chirp.html', {'chirp_data':chirp_data})
 
 @login_required(login_url = '/accounts/login')
 @csrf_protect
@@ -49,7 +65,6 @@ def add_chirp(request):
 		if form.is_valid():
 			chirp_form = form.save(commit = False)
 			chirp_form.user = request.user
-			chirp.likes = 0
 			chirp_form.save()
 		return HttpResponseRedirect("/")
 	else:

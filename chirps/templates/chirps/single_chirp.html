@@ -9,14 +9,41 @@
     <div class="col-md-3"></div>
 			<div class="col-md-6">
 				<div class="card">
-				<ul class="list-group">
-					<li class="list-group-item">
-						<h4 class="list-group-item-heading"><a href="/accounts/profile/user/{{chirp_data.user.username}}">{{chirp_data.user.first_name}} {{chirp_data.user.last_name}}</a> <small class="text-muted">@{{chirp_data.user.username}} {{chirp_data.timestamp}}</small></h4>
-						<div class="container">
-              <p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>
-            </div>
-					</li>
-				</ul>
+					<div class="card-block">
+						<ul class="list-group">
+							<li class="list-group-item">
+								<h4 class="list-group-item-heading"><a href="/accounts/profile/user/{{chirp_data.user.username}}">{{chirp_data.user.first_name}} {{chirp_data.user.last_name}}</a> <small class="text-muted">@{{chirp_data.user.username}} {{chirp_data.timestamp}}</small></h4>
+								<div class="container">
+		              <p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{chirp_data.html_tags_edit}}</p>
+		            </div>
+							</li>
+						</ul>
+					</div>
+					<form method="POST" action=".">{%csrf_token%}
+						<div class="input-group card-block">
+				      <input type="text" class="form-control" id="id_content" name="content" placeholder="Reply to @{{chirp_data.user.username}}" maxlength="140" autofocus="True">
+				      <span class="input-group-btn">
+			        <button class="btn btn-secondary" type="submit">Reply</button>
+				      </span>
+				    </div>
+						<input type="hidden" name="parent" value="{{chirp_data.id}}">
+						<input type="hidden" name="chirp_user" value="{{request.user.id}}">
+					</form>
+				{% if chirp_data.reply_count %}
+					<div class="card-block">
+				    <h4 class="card-title">Replies</h4>
+						<ul class="list-group">
+							{% for reply in chirp_data.children %}
+							<li class="list-group-item">
+								<h4 class="list-group-item-heading"><a href="/accounts/profile/user/{{reply.user.username}}">{{reply.user.first_name}} {{reply.user.last_name}}</a> <small class="text-muted">@{{reply.user.username}} {{reply.timestamp|timesince}}</small></h4>
+								<div class="container">
+									<p class="list-group-item-text responsive-image" style="word-wrap: break-word;">{{reply.html_tags_edit}}</p>
+								</div>
+							</li>
+							{% endfor %}
+						</ul>
+				  </div>
+				{% endif %}
 			</div>
 		</div>
        <div class="col-md-3"></div>

@@ -17,7 +17,7 @@ class UserProfile(models.Model):
     bio = models.CharField(max_length = 160, blank=True)
     location = models.CharField(max_length=50, blank=True)
     dob = models.DateField(default="2016-03-03")
-    follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
+    follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False, blank=True)
     display_pic = models.ImageField(upload_to=upload_location)
 
     def __str__(self):

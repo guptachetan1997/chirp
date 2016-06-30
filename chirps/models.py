@@ -12,12 +12,26 @@ class chirp(models.Model):
 	content = models.CharField(max_length=140)
 	timestamp = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey(User)
-	like = models.ManyToManyField(User, related_name='likes')
+	like = models.ManyToManyField(User, related_name='likes', blank=True)
 	rechirp_status = models.BooleanField(default = False)
 	origin_chirp_user = models.ForeignKey(User, blank = True, null=True, related_name="ori_chirp_by")
+	parent = models.ForeignKey("self", null=True, blank=True)
 
 	def __str__(self):
 		return self.content[:140]
+
+	def children(self):
+		return chirp.objects.filter(parent=self).order_by("-timestamp")
+
+	@property
+	def is_parent(self):
+		if self.parent == None:
+			return True
+		return False
+
+	@property
+	def reply_count(self):
+		return chirp.objects.filter(parent=self).count()
 
 	def html_tags_edit(self):
 		text = self.content
