@@ -55,6 +55,8 @@ def single_chirp(request, user_username, chirp_id):
 		return HttpResponseRedirect("/%s/%s" % (user_username, chirp_id))
 	else:
 		chirp_data = chirp.objects.get(id = chirp_id)
+		if chirp_data.is_parent is not True:
+			chirp_data = chirp_data.parent
 		return render(request, 'chirps/single_chirp.html', {'chirp_data':chirp_data})
 
 @login_required(login_url = '/accounts/login')
@@ -119,6 +121,7 @@ def search(request):
 	for attag in attags:
 		try:
 			search_profile = User.objects.get(username = attag.group()[1:])
+			return HttpResponseRedirect('/accounts/profile/user/%s'%search_profile.username)
 		except ObjectDoesNotExist:
 			search_profile = None
 		break
