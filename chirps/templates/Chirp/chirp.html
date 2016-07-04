@@ -24,8 +24,11 @@
 	</button>
 	<div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
 		<a class="navbar-brand" href="/">Chirp</a>
-		<a class="btn btn-danger pull-xs-right" href="/accounts/logout">Logout</a>&nbsp
-		<a class="btn btn-info pull-xs-right" href="/accounts/profile/user/{{request.user.username}}">{{request.user.username}}</a>&nbsp
+		<div class="btn-group pull-xs-right" role="group">
+			<a class="btn btn-info" href="/accounts/profile/user/{{request.user.username}}">{{request.user.username}}</a>
+			<a class="btn btn-secondary" href="/notifications/all">Notifications <span class="label label-pill label-default">thing</span></a>
+			<a class="btn btn-danger" href="/accounts/logout">Logout</a>
+		</div>
 		<form class="form-inline pull-xs-right" action="{% url 'chirps:search' %}">
 			<input class="form-control" name=search type="text" placeholder="Search">
 			<button class="btn btn-success" type="submit">Search</button>&nbsp

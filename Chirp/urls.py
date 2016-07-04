@@ -22,6 +22,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^notifications/', include('notifications.urls')),
     url(r'^api/auth/token', obtain_jwt_token),
     url(r'^api/accounts/', include('accounts.api.urls', namespace='users-api')),
     url(r'^api/chirps/', include('chirps.api.urls', namespace='chirps-api')),
