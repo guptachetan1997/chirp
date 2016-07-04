@@ -114,7 +114,9 @@ def rechirp(request):
 def search(request):
 	trends = get_trending_hasgtags()
 	who_to_follow = request.user.profile.get_who_to_follow()
-	query = request.GET.get('search', '')
+	query = request.GET.get('search')
+	if str(query) is '':
+		return HttpResponseRedirect('/')
 	pat = re.compile(r'[@](\w+)')
 	attags = pat.finditer(query)
 	search_profile = None
