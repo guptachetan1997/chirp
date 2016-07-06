@@ -8,7 +8,7 @@ import bleach
 
 # Create your models here.
 
-class chirp(models.Model):
+class Chirp(models.Model):
 	content = models.CharField(max_length=140)
 	timestamp = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey(User)
@@ -20,8 +20,21 @@ class chirp(models.Model):
 	def __str__(self):
 		return self.content[:140]
 
+	def save(self, *args, **kwargs):
+		super(Chirp, self).save(*args, **kwargs)
+		from notifications.models import new_notification
+		mentions = self.get_mentions()
+		if mentions:
+			verb = "mentioned you"
+			new_notification(
+			    origin_user = self.user.username,
+			    affected_users = mentions,
+			    verb=verb,
+			    target=self,
+			    )
+
 	def children(self):
-		return chirp.objects.filter(parent=self).order_by("-timestamp")
+		return Chirp.objects.filter(parent=self).order_by("-timestamp")
 
 	@property
 	def is_parent(self):
@@ -31,7 +44,20 @@ class chirp(models.Model):
 
 	@property
 	def reply_count(self):
-		return chirp.objects.filter(parent=self).count()
+		return Chirp.objects.filter(parent=self).count()
+
+	def get_mentions(self):
+		text = self.content
+		pattern = re.compile(r'[@](\w+)')
+		mentions = pattern.finditer(text)
+		mention_list = []
+		for mention in mentions:
+			username = mention.group()[1:]
+			try:
+				mention_list.append(User.objects.get(username=username))
+			except User.DoesNotExist:
+				print "Shame"
+		return mention_list
 
 	def html_tags_edit(self):
 		text = self.content

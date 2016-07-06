@@ -5,14 +5,14 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from models import chirp
+from models import Chirp
 from forms import ChirpForm,ChirpReplyForm
 from accounts.models import UserProfile
 import re
 
 def get_trending_hasgtags():
 	trends = {}
-	chirps = chirp.objects.all()
+	chirps = Chirp.objects.all()
 	for chirp_data in chirps:
 		text = chirp_data.content
 		pat = re.compile(r'[#](\w+)')
@@ -31,9 +31,9 @@ def get_trending_hasgtags():
 def feed(request):
 	who_to_follow = request.user.profile.get_who_to_follow()
 	trends = get_trending_hasgtags()
-	chirpss_data = chirp.objects.all().filter(parent=None).order_by('-timestamp')
+	chirpss_data = Chirp.objects.all().filter(parent=None).order_by('-timestamp')
 	chirps_data = [chirp_data for chirp_data in chirpss_data if request.user.profile.do_i_follow(chirp_data.user.profile)]
-	user_chirps = chirp.objects.filter(user=request.user).count()
+	user_chirps = Chirp.objects.filter(user=request.user).count()
 	return render(request, 'chirps/feed.html', {'chirps_data':chirps_data, 'user_chirps':user_chirps, 'trends':trends, 'who_to_follow':who_to_follow})
 
 @login_required(login_url = '/accounts/login')
@@ -41,12 +41,12 @@ def feed(request):
 def single_chirp(request, user_username, chirp_id):
 	if request.method == 'POST':
 		try:
-			reply_chirp_obj = chirp()
+			reply_chirp_obj = Chirp()
 			reply_chirp_obj.content = request.POST.get('content')
 			reply_chirp_obj.user = User.objects.get(id = int(request.POST.get('chirp_user')))
 			parent_id = int(request.POST.get('parent'))
 			if parent_id:
-				parent_obj = chirp.objects.filter(id=parent_id)
+				parent_obj = Chirp.objects.filter(id=parent_id)
 				if parent_obj is not None:
 					reply_chirp_obj.parent = parent_obj.first()
 				reply_chirp_obj.save()
@@ -54,7 +54,7 @@ def single_chirp(request, user_username, chirp_id):
 			return HttpResponseRedirect("/%s/%s" % (user_username, chirp_id))
 		return HttpResponseRedirect("/%s/%s" % (user_username, chirp_id))
 	else:
-		chirp_data = chirp.objects.get(id = chirp_id)
+		chirp_data = Chirp.objects.get(id = chirp_id)
 		if chirp_data.is_parent is not True:
 			chirp_data = chirp_data.parent
 		return render(request, 'chirps/single_chirp.html', {'chirp_data':chirp_data})
@@ -81,7 +81,7 @@ def like(request):
 		chirp_id = request.POST.get('like', False)
 		if chirp_id:
 			try:
-				req_chirp = chirp.objects.get(id = chirp_id)
+				req_chirp = Chirp.objects.get(id = chirp_id)
 				if req_chirp.like.filter(id = request.user.id).exists():
 					req_chirp.like.remove(request.user)
 				else:
@@ -98,8 +98,8 @@ def rechirp(request):
 		chirp_id = request.POST.get('rechirp', False)
 		if chirp_id:
 			try:
-				req_chirp = chirp.objects.get(id = chirp_id)
-				new_chirp = chirp()
+				req_chirp = Chirp.objects.get(id = chirp_id)
+				new_chirp = Chirp()
 				new_chirp = req_chirp
 				new_chirp.pk = None
 				new_chirp.rechirp_status = True
@@ -127,7 +127,7 @@ def search(request):
 		except ObjectDoesNotExist:
 			search_profile = None
 		break
-	search_data = chirp.objects.filter(content__icontains=query).order_by('-timestamp')
+	search_data = Chirp.objects.filter(content__icontains=query).order_by('-timestamp')
 	people = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
 	return render(request, 'chirps/search_results.html', {'search_data':search_data, 'query':query, 'search_profile':search_profile, 'people':people, 'trends':trends, 'who_to_follow':who_to_follow})
 	#We can differenitate here on the basis of the search query we have got like @ and # or any other textual query

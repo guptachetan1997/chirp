@@ -1,10 +1,10 @@
 from django import forms
 from django.forms import ModelForm
-from models import chirp
+from models import Chirp
 
 class ChirpForm(forms.ModelForm):
     class Meta:
-        model = chirp
+        model = Chirp
         exclude = ['timestamp', 'like', 'user', 'rechirp_status', 'origin_chirp_user', 'parent']
         fields = ['content']
         widgets = {
@@ -13,5 +13,5 @@ class ChirpForm(forms.ModelForm):
 
 class ChirpReplyForm(forms.ModelForm):
     class Meta:
-        model = chirp
+        model = Chirp
         exclude = ['timestamp', 'like', 'user', 'rechirp_status', 'origin_chirp_user', 'parent', 'content']

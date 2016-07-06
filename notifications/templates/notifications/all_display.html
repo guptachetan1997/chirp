@@ -51,24 +51,24 @@
 			<div class="card-header text-xs-center">
 					New Notifications <a href="/notifications/read"><span class="label label-pill label-danger">Read</span></a>
 			</div>
-				<ul class="list-group">
+				<div class="list-group">
 					{% for unread_notif in unread_notifs %}
-						<li class="list-group-item">
+						<a href='{{unread_notif.url}}' class="list-group-item">
 							{{unread_notif.content}} <small>{{unread_notif.timestamp|timesince}} ago.</small>
-						</li>
+						</a>
 					{% endfor %}
-					</ul>
+				</div>
 				{% endif %}
 			<div class="card-footer text-xs-center">
 					Read Notifications
 			</div>
-				<ul class="list-group">
+				<div class="list-group">
 					{% for read_notif in read_notifs %}
-						<li class="list-group-item">
+						<a href='{{read_notif.url}}' class="list-group-item">
 							{{read_notif.content}} <small>{{read_notif.timestamp|timesince}} ago.</small>
-						</li>
+						</a>
 					{% endfor %}
-					</ul>
+				</div>
 			</div>
 		</div>
 

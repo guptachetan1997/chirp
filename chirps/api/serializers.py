@@ -1,12 +1,12 @@
 from rest_framework.serializers import ModelSerializer,HyperlinkedIdentityField, SerializerMethodField
-from chirps.models import chirp
+from chirps.models import Chirp
 
 class ChirpListSerializer(ModelSerializer):
     url = HyperlinkedIdentityField(view_name="chirps-api:detail")
     delete_url = HyperlinkedIdentityField(view_name="chirps-api:delete")
     user = SerializerMethodField()
     class Meta:
-        model = chirp
+        model = Chirp
         fields = [
             'url',
             'user',
@@ -20,14 +20,14 @@ class ChirpListSerializer(ModelSerializer):
 
 class ChirpCreateUpdateSerializer(ModelSerializer):
     class Meta:
-        model = chirp
+        model = Chirp
         fields = [
             'content',
         ]
 
 class ChirpDetailSerializer(ModelSerializer):
     class Meta:
-        model = chirp
+        model = Chirp
         fields = [
             'content',
             'timestamp',

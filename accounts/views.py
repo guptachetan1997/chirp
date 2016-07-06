@@ -10,7 +10,7 @@ from forms import RegistrationForm
 from django.contrib import messages
 from forms import UserProfileForm
 from models import UserProfile
-from chirps.models import chirp
+from chirps.models import Chirp
 
 @csrf_protect
 def log_in(request):
@@ -118,9 +118,9 @@ def user_profile_display(request, user_username):
     profile_contents = UserProfile.objects.get(user_id = profile_basics.id)
     who_to_follow = request.user.profile.get_who_to_follow()
     user_info = {}
-    user_info['chirps_data'] = chirp.objects.filter(user_id = profile_basics.id).order_by("-timestamp")
+    user_info['chirps_data'] = Chirp.objects.filter(user_id = profile_basics.id).order_by("-timestamp")
     user_info['chirp_count'] = user_info['chirps_data'].count()
-    user_info['mentions'] = chirp.objects.filter(Q(content__icontains='@'+str(profile_basics.username)) & ~Q(user = profile_basics)).order_by("-timestamp")
+    user_info['mentions'] = Chirp.objects.filter(Q(content__icontains='@'+str(profile_basics.username)) & ~Q(user = profile_basics)).order_by("-timestamp")
     user_info['mention_count'] = user_info['mentions'].count()
     user_info['followers'] = profile_basics.profile.followed_by.all()
     user_info['follower_count'] = user_info['followers'].count()

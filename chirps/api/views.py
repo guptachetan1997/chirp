@@ -1,7 +1,7 @@
 from django.db.models import Q
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import ListAPIView,RetrieveAPIView,RetrieveUpdateAPIView,DestroyAPIView,CreateAPIView
-from chirps.models import chirp
+from chirps.models import Chirp
 from .serializers import ChirpListSerializer,ChirpDetailSerializer,ChirpCreateUpdateSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from .permissions import IsOwnerOrReadOnly
@@ -12,7 +12,7 @@ class ChirpListAPIView(ListAPIView):
     search_fields = ['content', 'user__username', 'user__first_name', 'user__last_name']
 
     def get_queryset(self, *args, **kwargs):
-        query_set_list = chirp.objects.all()
+        query_set_list = Chirp.objects.all()
         query = self.request.GET.get('q')
         if query:
             query_set_list = query_set_list.filter(
@@ -25,21 +25,21 @@ class ChirpListAPIView(ListAPIView):
 
 
 class ChirpUpdateAPIView(RetrieveUpdateAPIView):
-    queryset = chirp.objects.all().order_by('-timestamp')
+    queryset = Chirp.objects.all().order_by('-timestamp')
     serializer_class = ChirpCreateUpdateSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 class ChirpDeleteAPIView(DestroyAPIView):
-    queryset = chirp.objects.all()
+    queryset = Chirp.objects.all()
     serializer_class = ChirpDetailSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 class ChirpDetailAPIView(RetrieveAPIView):
-    queryset = chirp.objects.all()
+    queryset = Chirp.objects.all()
     serializer_class = ChirpDetailSerializer
 
 class ChirpCreateAPIView(CreateAPIView):
-    queryset = chirp.objects.all()
+    queryset = Chirp.objects.all()
     serializer_class = ChirpCreateUpdateSerializer
     permission_classes = [IsAuthenticated]
 
