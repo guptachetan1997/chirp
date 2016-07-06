@@ -26,7 +26,7 @@
 		<a class="navbar-brand" href="/">Chirp</a>
 		<div class="btn-group pull-xs-right" role="group">
 			<a class="btn btn-info" href="/accounts/profile/user/{{request.user.username}}">{{request.user.username}}</a>
-			<a class="btn btn-secondary" href="/notifications/all">Notifications <span class="label label-pill label-default">thing</span></a>
+			<a class="btn btn-secondary" href="/notifications/all">Notifications <span class="label label-pill label-default">{{request.user.profile.notification_count}}</span></a>
 			<a class="btn btn-danger" href="/accounts/logout">Logout</a>
 		</div>
 		<form class="form-inline pull-xs-right" action="{% url 'chirps:search' %}">

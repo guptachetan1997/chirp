@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
+from notifications.models import Notification
 
 def upload_location(instance, filename):
     u = User.objects.get(id = instance.user_id)
@@ -18,7 +19,7 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=50, blank=True)
     dob = models.DateField(default="2016-03-03")
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False, blank=True)
-    display_pic = models.ImageField(upload_to=upload_location)
+    display_pic = models.ImageField(default='/media/admin/default_user_dp/dp.jpg', upload_to=upload_location, null=True, blank=True)
 
     def __str__(self):
         u = User.objects.get(id = self.user_id)
@@ -37,6 +38,10 @@ class UserProfile(models.Model):
     		if not self.do_i_follow(user.profile):
     			who_to_follow.append(user)
     	return who_to_follow[:5]
+
+    @property
+    def notification_count(self):
+        return Notification.objects.unread_count(self.user)
 
 
 User.profile = property(lambda u : UserProfile.objects.get_or_create(user=u)[0])

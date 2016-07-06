@@ -29,7 +29,7 @@ class UserProfileForm(forms.ModelForm):
         fields = ('gender', 'bio', 'dob', 'location', 'display_pic')
         exclude = ('user', )
         widgets = {
-            'gender' : forms.TextInput(attrs = {'class': "form-control", 'maxlength':1, 'required':'', 'autofocus':'', 'placeholder': 'Gender'}),
+            'gender' : forms.TextInput(attrs = {'class': "form-control", 'maxlength':1, 'autofocus':'', 'placeholder': 'Gender'}),
             'bio' : forms.Textarea(attrs = {'class': "form-control", 'maxlength':160, 'placeholder': 'Bio'}),
             'location' : forms.TextInput(attrs = {'class': "form-control", 'maxlength':50, 'placeholder': 'Location'}),
         }
