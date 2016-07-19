@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from models import Chirp
-from forms import ChirpForm,ChirpReplyForm
+from .models import Chirp
+from .forms import ChirpForm,ChirpReplyForm
 from accounts.models import UserProfile
 import re
 

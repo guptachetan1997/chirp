@@ -6,10 +6,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 from django.db.models import Q
-from forms import RegistrationForm
+from .forms import RegistrationForm
 from django.contrib import messages
-from forms import UserProfileForm
-from models import UserProfile
+from .forms import UserProfileForm
+from .models import UserProfile
 from chirps.models import Chirp
 
 @csrf_protect

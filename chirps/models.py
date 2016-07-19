@@ -56,7 +56,7 @@ class Chirp(models.Model):
 			try:
 				mention_list.append(User.objects.get(username=username))
 			except User.DoesNotExist:
-				print "Shame"
+				print ("Shame")
 		return mention_list
 
 	def html_tags_edit(self):
